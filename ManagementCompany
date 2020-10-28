@@ -1,0 +1,140 @@
+My Drive
+/**
+ * @author Dina
+ *
+ */
+
+
+public class ManagementCompany {
+	
+	// Fields
+	
+	private final int MAX_PROPERTY = 5;
+	private double mgmFee;
+	private String name;
+	private Property[] Properties;
+	private String taxID;
+	private final int MAX_WIDTH=10;
+	private final int MAX_DEPTH=10;
+	private Plot plot;
+	private int indexArray;
+	
+	// Constructors
+	
+	public ManagementCompany(){
+		name = "";
+		taxID = "";
+		plot = new Plot();
+		Properties = new Property[MAX_PROPERTY];
+		indexArray = 0;
+	}
+	public ManagementCompany(String name, String taxID, double mgmFee) {
+		this.name = name;
+		this.taxID = taxID;
+		this.mgmFee = mgmFee;
+		Properties = new Property[MAX_PROPERTY];
+		indexArray = 0;
+		plot = new Plot();
+	}
+	public ManagementCompany(ManagementCompany otherCompany) {
+		name = otherCompany.name;
+		taxID = otherCompany.taxID;
+		mgmFee = otherCompany.mgmFee;
+		Properties = new Property[MAX_PROPERTY];
+		indexArray = 0;
+		plot = new Plot();
+	}
+	public ManagementCompany (String name, String taxID, double mgmFee, int x, int y, int width, int depth) {
+		this.name=name;
+		this.taxID=taxID;
+		this.mgmFee=mgmFee;
+		Properties = new Property[MAX_PROPERTY];
+		indexArray = 0;
+		plot = new Plot(x, y, width,depth);
+	}
+	public int addProperty(Property property) {
+		if(property == null) {
+           return -2;
+	}
+		
+		if (indexArray >= MAX_PROPERTY) {
+			return -1;
+		}
+		
+		//THIS PART SHOULD CHECK IF THE PROPERTY ENCOMPASSES OR OVERLAP
+        //We have to add NOT here because property should encompasses by the management company's plot
+        
+		
+		if (!this.plot.encompasses(property.getplot())) {
+			return -3;
+		}
+		
+		if (indexArray >0) {
+			Property p;
+			for (int i = 0; i < indexArray; i++) {
+				p = Properties[i];
+				
+				if( ((Plot) Property.getplot()).overlaps(p.getplot())) {
+					return -4;
+				}
+			}
+		}
+		
+		if (indexArray < MAX_PROPERTY) {
+			Properties[indexArray] = property;
+			indexArray++;
+		}
+		return indexArray -1;
+}
+	public int addProperty(String name, String city, double rent, String owner) {
+		Property property = new Property(city, owner, name, rent);
+		
+		if (indexArray >= MAX_PROPERTY) {
+			return -1;
+		}
+		if (!this.plot.encompasses(property.getplot())) {
+			return -3;
+		}
+		
+		if (indexArray > 0) {
+			for ( int i = 0; i < indexArray; i++) {
+				if ( ((Plot) property.getplot()).overlaps(Properties[i].getplot())) {
+					return -4;
+				}
+			}
+		}
+		if (indexArray < MAX_PROPERTY) {
+			Properties[indexArray] = property;
+			indexArray++;
+		}
+		return indexArray -1;
+		
+	}
+	
+	public int addProperty (String name, String city, double rent, String owner, int x, int y, int width, int depth) {
+		Property property = new Property ( city, owner, name, rent, x, y, width, depth);
+		
+		if (indexArray >= MAX_PROPERTY) {
+			return -1;
+		}
+		
+		//We have to add NOT here because property should encompasses by the management company's plot
+        
+		if (!this.plot.encompasses(property.getplot())) {
+			return -3;
+		}
+		
+		if (indexArray > 0) {
+			for ( int i = 0; i < indexArray; i++) {
+				if ( ((Plot) property.getplot()).overlaps(Properties[i].getplot())) {
+					return -4;
+				}
+			}
+		}
+		if (indexArray < MAX_PROPERTY) {
+			Properties[indexArray] = property;
+			indexArray++;
+		}
+		return indexArray -1;
+	}
+}
